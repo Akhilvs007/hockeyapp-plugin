@@ -128,13 +128,12 @@ public class HockeyappRecorder extends Recorder {
 			EnvVars vars = build.getEnvironment(listener);
 
 			// Copy remote file to local file system.
-			// tempDir = File.createTempFile("jtf", null);
-			// tempDir.delete();
-			// tempDir.mkdirs();
+			tempDir = File.createTempFile("jtf", null);
+			tempDir.delete();
+			tempDir.mkdirs();
 
-            // String expandedFilePath = vars.expand(filePath);
-            // build.getWorkspace().copyRecursiveTo(expandedFilePath, null, new FilePath(tempDir));
-            // FileSet fileSet = Util.createFileSet(tempDir, expandedFilePath, null);
+            FileSet fileSet = Util.createFileSet(new File(build.getWorkspace().getRemote()),
+ 					vars.expand(filePath), null);
 			// Take the first one that matches the pattern
 			File file = new File(fileSet.iterator().next().toString());
 			listener.getLogger().println(file);
@@ -188,8 +187,8 @@ public class HockeyappRecorder extends Recorder {
 			entity.addPart("ipa", fileBody);
 
 			if (dsymPath != null) {
-                		FileSet dsymFileSet = Util.createFileSet(new File(build.getWorkspace().getRemote()),
- -					vars.expand(dsymPath), null);
+                FileSet dsymFileSet = Util.createFileSet(new File(build.getWorkspace().getRemote()),
+ 					vars.expand(dsymPath), null);
 				// Take the first one that matches the pattern
 				File dsymFile = new File(dsymFileSet.iterator().next().toString());
 				listener.getLogger().println(dsymFile);
